@@ -13,8 +13,9 @@ namespace Trabalho_POO.Models
 
     public abstract class Conta
     {
-        [Required]
+
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public Cliente_ cliente { get; set; }
@@ -35,9 +36,8 @@ namespace Trabalho_POO.Models
         public decimal Total { get; set; }
         public Tipo_Consumidor tipo { get; set; }
         public StatusConta status { get; set; }
-        public Conta(int id, double consumo)
+        public Conta(double consumo)
         {
-            Id = id;
             Consumo = consumo;
             status = StatusConta.EmAberto;
         }

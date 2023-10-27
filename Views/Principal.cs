@@ -78,14 +78,13 @@ public static class Principal
 
             var client = db.Clientes.Where(c => c.Id == CPFCNPJ).FirstOrDefault();
 
-            Console.WriteLine("Informe o id da conta:");
-            int idConta = int.Parse(Console.ReadLine());   
+           // 
             Console.WriteLine("Informe o consumo de agua da conta:");
             double consumoAgua = double.Parse(Console.ReadLine());
             Console.WriteLine("Informe o consumo de esgoto da conta:");
             double consumoEsgoto = double.Parse(Console.ReadLine());
 
-            ContaAgua conta = new ContaAgua(idConta, consumoAgua, consumoEsgoto);
+            ContaAgua conta = new ContaAgua(consumoAgua, consumoEsgoto);
             conta.cliente= novoCliente;
             
            client.contas.Add(conta);
