@@ -2,39 +2,51 @@
 using System;
 using System.Collections.Generic;
 using Trabalho_POO.Context;
+using Trabalho_POO.Controllers;
 using Trabalho_POO.Models;
+using Trabalho_POO.Views;
+
 
 public static class Principal
 {
-    public static void Main()
+    public static void Main(Cliente_ user)
     {
-        Console.WriteLine("Bem-vindo à nossa Landing Page!");
-        Console.WriteLine("-------------------------------");
-        Console.WriteLine("O que você gostaria de fazer?");
-        Console.WriteLine("1. Criar um cliente");
-        Console.WriteLine("2. Criar uma conta (luz ou água)");
-        Console.WriteLine("3. Consultar contas");
-        Console.WriteLine("4. Consultar clientes");
-        Console.WriteLine("5. Sair");
+        Console.WriteLine();
+        Console.WriteLine("              ============================================================                    ");
+        Console.WriteLine($"                     Bem-vindo, {user.Nome} ao nosso Menu!                              ");
+        Console.WriteLine("              |----------------------------------------------------------|                    ");
+        Console.WriteLine("              |         O que você gostaria de fazer?                    |                    ");
+        Console.WriteLine("              |         1. Cadastra uma conta água                       |                    ");
+        Console.WriteLine("              |         2. Cadastra uma conta luz                        |                    ");
+        Console.WriteLine("              |         3. Consultar contas                              |                    ");
+        Console.WriteLine("              |         4. Relatorios personalizados                     |                    ");
+        Console.WriteLine("              |         9. Sair                                          |                    ");
+        Console.WriteLine("              ============================================================                    ");
 
         string escolha = Console.ReadLine();
 
         switch (escolha)
         {
             case "1":
-                CriarCliente();
+                Servicos.CriarContaAgua(user);
                 break;
             case "2":
-                CriarContaAgua();
+                Servicos.CriarContaLuz(user);
                 break;
             case "3":
-                ConsultarContas();
+                Servicos.ConsultarContas(user);
                 break;
             case "4":
-                ConsultarClientes();
+                Relatorios.MenuRelatorios(user);
                 break;
             case "5":
-                Console.WriteLine("Obrigado por visitar nosso app. Até mais!");
+                ConsultarClientes(user);
+                break;
+            case "9":
+                Console.WriteLine("              ===========================================================                   ");
+                Console.WriteLine("              |      Obrigado por visitar nosso app. Até mais!          |                   ");
+                Console.WriteLine("              ===========================================================                   ");
+
                 break;
             default:
                 Console.WriteLine("Opção inválida. Por favor, escolha uma opção válida.");
@@ -42,68 +54,9 @@ public static class Principal
         }
     }
 
-    static void CriarCliente()
+
+    static void ConsultarClientes(Cliente_ user)
     {
-        using (var db = new ProjetoDbContext())
-        {
-            Console.WriteLine("Digite o nome do cliente:");
-            string nome = Console.ReadLine();
-            Console.WriteLine("Digite o CPF/CNPJ do cliente:");
-            string ID = Console.ReadLine();
-
-            Cliente_ novoCliente = new Cliente_(nome, ID);
-
-            db.Add(novoCliente);
-            db.SaveChanges();
-        }
-
-        Console.WriteLine("Cliente criado com sucesso!");
-
-        Main(); // Volta ao menu principal
-    }
-
-    static void CriarContaAgua()
-    {
-        using (var db = new ProjetoDbContext())
-        {
-            
-            Console.WriteLine("Digite o CPF/CNPJ do cliente:");
-            string CPFCNPJ = Console.ReadLine();
-            Cliente_ novoCliente = db.Clientes.Where(c => c.Id == CPFCNPJ).FirstOrDefault();
-            if(novoCliente == null)
-            {
-                Console.WriteLine("Cliente não encontrado");
-                Main();
-            }
-
-            var client = db.Clientes.Where(c => c.Id == CPFCNPJ).FirstOrDefault();
-
-           // 
-            Console.WriteLine("Informe o consumo de agua da conta:");
-            double consumoAgua = double.Parse(Console.ReadLine());
-            Console.WriteLine("Informe o consumo de esgoto da conta:");
-            double consumoEsgoto = double.Parse(Console.ReadLine());
-
-            ContaAgua conta = new ContaAgua(consumoAgua, consumoEsgoto);
-            conta.cliente= novoCliente;
-            
-           client.contas.Add(conta);
-
-
-            
-            db.SaveChanges();
-        }
-        Main(); // Volta ao menu principal
-    }
-
-    static void ConsultarContas()
-    {
-        Main(); // Volta ao menu principal
-    }
-
-    static void ConsultarClientes()
-    {
-        Main(); // Volta ao menu principal
+        Main(user); // Volta ao menu principal
     }
 }
-

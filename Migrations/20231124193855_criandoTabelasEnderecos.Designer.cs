@@ -11,8 +11,8 @@ using Trabalho_POO.Context;
 namespace Trabalho_POO.Migrations
 {
     [DbContext(typeof(ProjetoDbContext))]
-    [Migration("20231024234627_test")]
-    partial class test
+    [Migration("20231124193855_criandoTabelasEnderecos")]
+    partial class criandoTabelasEnderecos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,10 @@ namespace Trabalho_POO.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("Clientes");
@@ -43,9 +47,6 @@ namespace Trabalho_POO.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<double>("consumo")
-                        .HasColumnType("Double (10,3)");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -61,16 +62,29 @@ namespace Trabalho_POO.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(14)");
 
+                    b.Property<double>("consumo")
+                        .HasColumnType("Double (10,3)");
+
+                    b.Property<int>("enderecoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("lançamento")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<double>("leitura")
+                        .HasColumnType("double");
+
+                    b.Property<double>("leituraAnterior")
+                        .HasColumnType("double");
+
                     b.Property<int>("status")
                         .HasColumnType("int");
 
-                    b.Property<string>("tarifa")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
                     b.Property<int>("tipo")
                         .HasColumnType("int");
+
+                    b.Property<DateOnly>("vencimento")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
@@ -83,16 +97,37 @@ namespace Trabalho_POO.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("Trabalho_POO.Models.Enderecos", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("bairro")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("clienteId")
+                        .IsRequired()
+                        .HasColumnType("varchar(14)");
+
+                    b.Property<string>("logradouro")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("numero")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("clienteId");
+
+                    b.ToTable("Enderecos");
+                });
+
             modelBuilder.Entity("Trabalho_POO.Models.ContaAgua", b =>
                 {
                     b.HasBaseType("Trabalho_POO.Models.Conta");
-
-                    b.Property<double>("consumoEsgoto")
-                        .HasColumnType("double");
-
-                    b.Property<string>("tarifaEsgoto")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasDiscriminator().HasValue("ContaAgua");
                 });
@@ -100,16 +135,6 @@ namespace Trabalho_POO.Migrations
             modelBuilder.Entity("Trabalho_POO.Models.ContaLuz", b =>
                 {
                     b.HasBaseType("Trabalho_POO.Models.Conta");
-
-                    b.Property<double?>("ConsumoMesAnterior")
-                        .HasColumnType("double");
-
-                    b.Property<string>("Endereco")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("TipoConta")
-                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("ContaLuz");
                 });
@@ -125,9 +150,22 @@ namespace Trabalho_POO.Migrations
                     b.Navigation("cliente");
                 });
 
+            modelBuilder.Entity("Trabalho_POO.Models.Enderecos", b =>
+                {
+                    b.HasOne("Trabalho_POO.Models.Cliente_", "cliente")
+                        .WithMany("enderecos")
+                        .HasForeignKey("clienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("cliente");
+                });
+
             modelBuilder.Entity("Trabalho_POO.Models.Cliente_", b =>
                 {
                     b.Navigation("contas");
+
+                    b.Navigation("enderecos");
                 });
 #pragma warning restore 612, 618
         }

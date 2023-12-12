@@ -17,14 +17,18 @@ namespace Trabalho_POO.Models
         [StringLength(14)]
         [Key]
         public string Id { get; set; }
+        public string password { get; set; }
 
         public ICollection<Conta>? contas { get; set; }
-        public Cliente_(string nome, string id)
+        public ICollection<Enderecos>? enderecos { get; set; }
+        public Cliente_(string nome, string id, string password)
         {
             Nome = nome;
             Id = id;
-            contas= new List<Conta>();
+            this.password = password;
+            contas = new List<Conta>();
+            enderecos = new List<Enderecos>();
         }
-        
+
     }
 }

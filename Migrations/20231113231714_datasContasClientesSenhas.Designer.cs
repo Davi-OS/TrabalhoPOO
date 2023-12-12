@@ -11,8 +11,8 @@ using Trabalho_POO.Context;
 namespace Trabalho_POO.Migrations
 {
     [DbContext(typeof(ProjetoDbContext))]
-    [Migration("20231024234627_test")]
-    partial class test
+    [Migration("20231113231714_datasContasClientesSenhas")]
+    partial class datasContasClientesSenhas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,10 @@ namespace Trabalho_POO.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -61,6 +65,9 @@ namespace Trabalho_POO.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(14)");
 
+                    b.Property<DateTime>("lançamento")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<int>("status")
                         .HasColumnType("int");
 
@@ -71,6 +78,9 @@ namespace Trabalho_POO.Migrations
 
                     b.Property<int>("tipo")
                         .HasColumnType("int");
+
+                    b.Property<DateOnly>("vencimento")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
